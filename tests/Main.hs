@@ -13,32 +13,32 @@ import           Test.Dwergaz
 import qualified TOML
 import           TOML.Lens
 
-readExample :: IO [(T.Text, TOML.Value)]
-readExample = readExFile >>= parse >>= handleError
-  where
-    readExFile  = readFile "./example/example-v0.4.0.toml"
-    parse       = pure . TOML.parseTOML
-    handleError = either (error . show) pure
+
+alist :: Ord k => [(k, v)] -> Map.Map k v
+alist = Map.fromList
 
 tableAt :: T.Text -> Map.Map T.Text TOML.Value -> Map.Map T.Text TOML.Value
-tableAt k = views (at k . _Just . _Table) Map.fromList
+tableAt k = views (at k . _Just . _Table) alist
 
-test1 :: Map.Map T.Text TOML.Value -> Test
+test1 :: [(T.Text, TOML.Value)] -> Test
 test1 kv = Expect "get key1" (==) expected actual
   where
     expected = [1, 2, 3]
-    actual   = toListOf (at "key1" . _Just . _List . traverse . _Integer) (tableAt "array" kv)
+    actual   = toListOf (at "key1" . _Just . _List . traverse . _Integer) (tableAt "array" (alist kv))
 
-tests :: Map.Map T.Text TOML.Value -> [Test]
-tests kv = [test1] <*> [kv]
+runTests :: [(T.Text, TOML.Value)] -> IO [Result]
+runTests kv = pure (runTest <$> [test1 kv])
 
-results :: Map.Map T.Text TOML.Value -> IO [Result]
-results kv = pure (fmap runTest (tests kv))
+readTOMLFile :: String -> IO [(T.Text, TOML.Value)]
+readTOMLFile file = readExFile >>= parse >>= handleError
+  where
+    readExFile  = readFile file
+    parse       = pure . TOML.parseTOML
+    handleError = either (error . show) pure
 
 main :: IO ()
 main =  do
-  ex <- readExample
-  -- _  <- print (Map.fromList ex)
-  rs <- results (Map.fromList ex)
+  ex <- readTOMLFile "./example/example-v0.4.0.toml"
+  rs <- runTests ex
   _  <- mapM_ print rs
   unless (all isPassed rs) exitFailure
