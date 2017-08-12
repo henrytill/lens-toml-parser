@@ -3,17 +3,25 @@
 
 name:                lens-toml-parser
 version:             0.1.0.0
--- synopsis:            
--- description:         
+synopsis:            Lenses for toml-parser
+description:         Lenses for toml-parser
 license:             ISC
 license-file:        LICENSE
 author:              Henry Till
 maintainer:          henrytill@gmail.com
--- copyright:           
+homepage:            https://github.com/xngns/lens-toml-parser
+copyright:           Copyright (c) 2017, Henry Till
 category:            Language
 build-type:          Simple
-extra-source-files:  ChangeLog.md
 cabal-version:       >=1.10
+
+extra-source-files:
+  .gitignore
+  ChangeLog.md
+
+source-repository head
+  type:     git
+  location: https://github.com/xngns/lens-toml-parser.git
 
 library
   exposed-modules:     TOML.Lens
