@@ -17,14 +17,27 @@ import           TOML.Lens
 alist :: Ord k => [(k, v)] -> Map.Map k v
 alist = Map.fromList
 
-tableAt :: T.Text -> Map.Map T.Text TOML.Value -> Map.Map T.Text TOML.Value
-tableAt k = views (at k . _Just . _Table) alist
+tableAt
+  :: (Phantom f, Applicative f)
+  => T.Text
+  -> (Map.Map T.Text TOML.Value -> f (Map.Map T.Text TOML.Value))
+  -> Map.Map T.Text TOML.Value
+  -> f (Map.Map T.Text TOML.Value)
+tableAt k = at k . _Just . _Table . to alist
+
+listAt
+  :: Applicative f
+  => T.Text
+  -> ([TOML.Value] -> f [TOML.Value])
+  -> Map.Map T.Text TOML.Value
+  -> f (Map.Map T.Text TOML.Value)
+listAt k = at k . _Just . _List
 
 test1 :: [(T.Text, TOML.Value)] -> Test
 test1 kv = Expect "get key1" (==) expected actual
   where
     expected = [1, 2, 3]
-    actual   = toListOf (at "key1" . _Just . _List . traverse . _Integer) (tableAt "array" (alist kv))
+    actual   = toListOf (tableAt "array" . listAt "key1" . traverse . _Integer) (alist kv)
 
 runTests :: [(T.Text, TOML.Value)] -> IO [Result]
 runTests kv = pure (runTest <$> [test1 kv])
