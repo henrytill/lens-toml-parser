@@ -17,13 +17,18 @@ import           TOML.Lens
 alist :: Ord k => [(k, v)] -> Map.Map k v
 alist = Map.fromList
 
-tableAt
-  :: (Phantom f, Applicative f)
+alistLens
+  :: (Ord k1, Ord k2, Functor f)
+  => LensLike f [(k1, v1)] [(k2, v2)] (Map.Map k1 v1) (Map.Map k2 v2)
+alistLens = iso Map.fromList Map.toList
+
+mapAt
+  :: Applicative f
   => T.Text
   -> (Map.Map T.Text TOML.Value -> f (Map.Map T.Text TOML.Value))
   -> Map.Map T.Text TOML.Value
   -> f (Map.Map T.Text TOML.Value)
-tableAt k = at k . _Just . _Table . to alist
+mapAt k = at k . _Just . _Table . alistLens
 
 listAt
   :: Applicative f
@@ -34,18 +39,17 @@ listAt
 listAt k = at k . _Just . _List
 
 test1 :: [(T.Text, TOML.Value)] -> Test
-test1 kv = Expect "get key1" (==) expected actual
+test1 kv = Expect "get key1 from array table" (==) expected actual
   where
     expected = [1, 2, 3]
-    actual   = toListOf (tableAt "array" . listAt "key1" . traverse . _Integer) (alist kv)
+    actual   = alist kv ^.. mapAt "array" . listAt "key1" . traverse . _Integer
 
 runTests :: [(T.Text, TOML.Value)] -> IO [Result]
 runTests kv = pure (runTest <$> [test1 kv])
 
 readTOMLFile :: String -> IO [(T.Text, TOML.Value)]
-readTOMLFile file = readExFile >>= parse >>= handleError
+readTOMLFile file = readFile file >>= parse >>= handleError
   where
-    readExFile  = readFile file
     parse       = pure . TOML.parseTOML
     handleError = either (error . show) pure
 
