@@ -4,11 +4,11 @@ module Main (main) where
 
 import           Control.Monad (unless)
 import qualified Data.Map.Lazy as Map
-import qualified Data.Text as T
-import           Data.Text.IO (readFile)
+import qualified Data.Text     as T
+import           Data.Text.IO  (readFile)
 import           Lens.Simple
-import           Prelude hiding (readFile)
-import           System.Exit (exitFailure)
+import           Prelude       hiding (readFile)
+import           System.Exit   (exitFailure)
 import           Test.Dwergaz
 import qualified TOML
 import           TOML.Lens

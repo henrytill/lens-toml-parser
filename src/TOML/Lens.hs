@@ -23,7 +23,7 @@ module TOML.Lens
   ) where
 
 import           Data.Profunctor
-import qualified Data.Text as T
+import qualified Data.Text       as T
 import           Data.Time
 
 import           TOML
