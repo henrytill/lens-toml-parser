@@ -6,8 +6,7 @@
 -- Maintainer  : henrytill@gmail.com
 -- Stability   : experimental
 --
--- With help from:
--- <https://github.com/ekmett/lens/wiki/How-can-I-write-lenses-without-depending-on-lens%3F>
+-- Lenses for <https://hackage.haskell.org/package/toml-parser toml-parser>.
 --
 module TOML.Lens
   ( _Table
@@ -28,6 +27,9 @@ import           Data.Time
 
 import           TOML
 
+--
+-- With help from:
+-- <https://github.com/ekmett/lens/wiki/How-can-I-write-lenses-without-depending-on-lens%3F>
 --
 -- @
 -- type Prism s t a b = (Choice p, Applicative f) => p a (f b) -> p s (f t)
