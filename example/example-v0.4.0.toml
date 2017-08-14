@@ -227,15 +227,17 @@ color = "gray"
 [[fruit]]
   name = "apple"
 
-# [[fruit.physical]]
-#    color = "red"
-#    shape = "round"
+## toml-parser does handle the following:
 #
-#  [[fruit.variety]]
-#    name = "red delicious"
+#   [fruit.physical]
+#     color = "red"
+#     shape = "round"
 #
-#  [[fruit.variety]]
-#    name = "granny smith"
+#   [[fruit.variety]]
+#     name = "red delicious"
+#
+#   [[fruit.variety]]
+#     name = "granny smith"
 #
 # [[fruit]]
 #   name = "banana"
