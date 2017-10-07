@@ -58,6 +58,7 @@ _Table =
   prism Table $ \ n -> case n of
     Table v -> pure v
     _       -> Left n
+{-# INLINE _Table #-}
 
 -- | @_List :: Prism' Value [Value]@
 _List
@@ -68,6 +69,7 @@ _List =
   prism List $ \ n -> case n of
     List v -> pure v
     _      -> Left n
+{-# INLINE _List #-}
 
 -- | @_Double :: Prism' Value Double@
 _Double
@@ -78,6 +80,7 @@ _Double =
   prism Double $ \ n -> case n of
     Double v -> pure v
     _        -> Left n
+{-# INLINE _Double #-}
 
 -- | @_Integer :: Prism' Value Integer@
 _Integer
@@ -88,6 +91,7 @@ _Integer =
   prism Integer $ \ n -> case n of
     Integer v -> pure v
     _         -> Left n
+{-# INLINE _Integer #-}
 
 -- | @_String :: Prism' Value T.Text@
 _String
@@ -98,6 +102,7 @@ _String =
   prism String $ \ n -> case n of
     String v -> pure v
     _        -> Left n
+{-# INLINE _String #-}
 
 -- | @_Bool :: Prism' Value Bool@
 _Bool
@@ -108,6 +113,7 @@ _Bool =
   prism Bool $ \ n -> case n of
     Bool v -> pure v
     _      -> Left n
+{-# INLINE _Bool #-}
 
 -- | @_ZonedTimeV :: Prism' Value ZonedTime@
 _ZonedTimeV
@@ -118,6 +124,7 @@ _ZonedTimeV =
   prism ZonedTimeV $ \ n -> case n of
     ZonedTimeV v -> pure v
     _            -> Left n
+{-# INLINE _ZonedTimeV #-}
 
 -- | @_LocalTimeV :: Prism' Value LocalTime@
 _LocalTimeV
@@ -128,6 +135,7 @@ _LocalTimeV =
   prism LocalTimeV $ \ n -> case n of
     LocalTimeV v -> pure v
     _            -> Left n
+{-# INLINE _LocalTimeV #-}
 
 -- | @_DayV :: Prism' Value Day@
 _DayV
@@ -138,6 +146,7 @@ _DayV =
   prism DayV $ \ n -> case n of
     DayV v -> pure v
     _      -> Left n
+{-# INLINE _DayV #-}
 
 -- | @_TimeOfDayV :: Prism' Value TimeOfDay@
 _TimeOfDayV
@@ -148,3 +157,4 @@ _TimeOfDayV =
   prism TimeOfDayV $ \ n -> case n of
     TimeOfDayV v -> pure v
     _            -> Left n
+{-# INLINE _TimeOfDayV #-}
