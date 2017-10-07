@@ -14,6 +14,9 @@ import qualified TOML
 import           TOML.Lens
 
 
+allEqual :: Eq a => [a] -> Bool
+allEqual (x:xs) = all (== x) xs
+allEqual []     = error "allEqual: empty list"
 
 alist
   :: (Ord k1, Ord k2, Functor f)
@@ -87,7 +90,7 @@ testStringBasicBasic kv
 testStringMultiline :: [(T.Text, TOML.Value)] -> Test
 testStringMultiline kv
   = Predicate "'key1', 'key2', and 'key3' from 'multiline' from 'string' are all the same"
-              (\ xs -> all (== head xs) (tail xs))
+              allEqual
               [actual1, actual2, actual3]
   where
     actual1 = kv ^? alist . mapAt "string" . mapAt "multiline" . at "key1" . _Just . _String
@@ -97,7 +100,7 @@ testStringMultiline kv
 testStringMultilineContinued :: [(T.Text, TOML.Value)] -> Test
 testStringMultilineContinued kv
   = Predicate "'key1', 'key2', and 'key3' from 'continued' from 'multiline' from 'string' are all the same"
-              (\ xs -> all (== head xs) (tail xs))
+              allEqual
               [actual1, actual2, actual3]
   where
     actual1 = kv ^? alist . mapAt "string" . mapAt "multiline" . mapAt "continued" . at "key1" . _Just . _String
