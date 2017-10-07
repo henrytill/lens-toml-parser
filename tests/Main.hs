@@ -2,13 +2,15 @@
 
 module Main (main) where
 
-import           Control.Monad (unless)
-import qualified Data.Map.Lazy as Map
-import qualified Data.Text     as T
-import           Data.Text.IO  (readFile)
-import           Lens.Simple
-import           Prelude       hiding (readFile)
-import           System.Exit   (exitFailure)
+import           Control.Monad          (unless)
+import qualified Data.Map.Lazy          as Map
+import qualified Data.Text              as T
+import           Data.Text.IO           (readFile)
+import           Lens.Family2
+import           Lens.Family2.Stock     (at, _Just)
+import           Lens.Family2.Unchecked (iso)
+import           Prelude                hiding (readFile)
+import           System.Exit            (exitFailure)
 import           Test.Dwergaz
 import qualified TOML
 import           TOML.Lens
