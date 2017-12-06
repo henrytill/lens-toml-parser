@@ -56,7 +56,7 @@ _Table
   -> p Value (f Value)
 _Table =
   prism Table $ \ n -> case n of
-    Table v -> pure v
+    Table v -> Right v
     _       -> Left n
 {-# INLINE _Table #-}
 
@@ -67,7 +67,7 @@ _List
   -> p Value (f Value)
 _List =
   prism List $ \ n -> case n of
-    List v -> pure v
+    List v -> Right v
     _      -> Left n
 {-# INLINE _List #-}
 
@@ -78,7 +78,7 @@ _Double
   -> p Value (f Value)
 _Double =
   prism Double $ \ n -> case n of
-    Double v -> pure v
+    Double v -> Right v
     _        -> Left n
 {-# INLINE _Double #-}
 
@@ -89,7 +89,7 @@ _Integer
   -> p Value (f Value)
 _Integer =
   prism Integer $ \ n -> case n of
-    Integer v -> pure v
+    Integer v -> Right v
     _         -> Left n
 {-# INLINE _Integer #-}
 
@@ -100,7 +100,7 @@ _String
   -> p Value (f Value)
 _String =
   prism String $ \ n -> case n of
-    String v -> pure v
+    String v -> Right v
     _        -> Left n
 {-# INLINE _String #-}
 
@@ -111,7 +111,7 @@ _Bool
   -> p Value (f Value)
 _Bool =
   prism Bool $ \ n -> case n of
-    Bool v -> pure v
+    Bool v -> Right v
     _      -> Left n
 {-# INLINE _Bool #-}
 
@@ -122,7 +122,7 @@ _ZonedTimeV
   -> p Value (f Value)
 _ZonedTimeV =
   prism ZonedTimeV $ \ n -> case n of
-    ZonedTimeV v -> pure v
+    ZonedTimeV v -> Right v
     _            -> Left n
 {-# INLINE _ZonedTimeV #-}
 
@@ -133,7 +133,7 @@ _LocalTimeV
   -> p Value (f Value)
 _LocalTimeV =
   prism LocalTimeV $ \ n -> case n of
-    LocalTimeV v -> pure v
+    LocalTimeV v -> Right v
     _            -> Left n
 {-# INLINE _LocalTimeV #-}
 
@@ -144,7 +144,7 @@ _DayV
   -> p Value (f Value)
 _DayV =
   prism DayV $ \ n -> case n of
-    DayV v -> pure v
+    DayV v -> Right v
     _      -> Left n
 {-# INLINE _DayV #-}
 
@@ -155,6 +155,6 @@ _TimeOfDayV
   -> p Value (f Value)
 _TimeOfDayV =
   prism TimeOfDayV $ \ n -> case n of
-    TimeOfDayV v -> pure v
+    TimeOfDayV v -> Right v
     _            -> Left n
 {-# INLINE _TimeOfDayV #-}

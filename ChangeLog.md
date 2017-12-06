@@ -8,3 +8,7 @@
 
 * Added `INLINE` pragmas.
 * Updated tests.
+
+## 0.1.0.2  -- 2017-12-06
+
+* Refactored (used `Right` instead of `pure` in prism definitions).
