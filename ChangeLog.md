@@ -9,6 +9,7 @@
 * Added `INLINE` pragmas.
 * Updated tests.
 
-## 0.1.0.2  -- 2017-12-06
+## 0.1.0.2  -- 2018-04-22
 
 * Refactored (used `Right` instead of `pure` in prism definitions).
+* Simplified tests/Main.hs to appease hlint.
