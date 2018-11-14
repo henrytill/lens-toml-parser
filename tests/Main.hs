@@ -141,5 +141,5 @@ main :: IO ()
 main =  do
   ex <- readTOMLFile "./example/example-v0.4.0.toml"
   let rs = runTests ex
-  _  <- mapM_ print rs
+  mapM_ print rs
   unless (all isPassed rs) exitFailure
