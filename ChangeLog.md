@@ -13,3 +13,8 @@
 
 * Refactored (used `Right` instead of `pure` in prism definitions).
 * Simplified tests/Main.hs to appease hlint.
+
+## 0.1.0.3  -- 2018-11-14
+
+* Loosened constraints on `base`, `containers`, `profunctors`, and `time`.
+* Tweaked tests/Main.hs to appease hlint.
