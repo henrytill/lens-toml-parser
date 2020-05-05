@@ -1,4 +1,6 @@
-dist/
-dist-newstyle/
-shell.nix
+*~
+/dist/
+/dist-newstyle/
 cabal.project.local
+shell.nix
+/result/
