@@ -18,3 +18,7 @@
 
 * Loosened constraints on `base`, `containers`, `profunctors`, and `time`.
 * Tweaked tests/Main.hs to appease hlint.
+
+## 0.1.0.4  -- 2020-05-05
+
+* Loosened constraints on `base`, `hlint`, `profunctors`, and `time`.
