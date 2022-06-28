@@ -5,4 +5,4 @@
 
 Lenses for [toml-parser](https://hackage.haskell.org/package/toml-parser).
 
-See the [tests](https://github.com/xngns/lens-toml-parser/blob/master/tests/Main.hs) for usage examples.
+See the [tests](https://github.com/henrytill/lens-toml-parser/blob/master/tests/Main.hs) for usage examples.
