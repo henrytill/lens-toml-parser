@@ -18,7 +18,6 @@ tested-with:         GHC == 8.0.2, GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.5, GHC
 
 extra-source-files:
   .gitignore
-  .travis.yml
   ChangeLog.md
   README.md
   example/example-v0.4.0.toml
