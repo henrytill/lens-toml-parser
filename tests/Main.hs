@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE Rank2Types        #-}
 
 module Main (main) where
 
@@ -7,8 +8,8 @@ import qualified Data.Map.Lazy          as Map
 import qualified Data.Text              as T
 import           Data.Text.IO           (readFile)
 import           Lens.Family2
-import           Lens.Family2.Stock     (at, _Just)
-import           Lens.Family2.Unchecked (iso)
+import           Lens.Family2.Stock     (at, just_)
+import           Lens.Family2.Unchecked (adapter)
 import           Prelude                hiding (readFile)
 import           System.Exit            (exitFailure)
 import           Test.Dwergaz
@@ -19,6 +20,9 @@ import           TOML.Lens
 allEqual :: Eq a => [a] -> Bool
 allEqual (x:xs) = all (== x) xs
 allEqual []     = error "allEqual: empty list"
+
+iso :: (a -> b) -> (b' -> a') -> Lens a a' b b'
+iso ctor dtor = under (adapter ctor dtor)
 
 alist
   :: (Ord k1, Ord k2, Functor f)
@@ -31,7 +35,7 @@ mapAt
   -> (Map.Map T.Text TOML.Value -> f (Map.Map T.Text TOML.Value))
   -> Map.Map T.Text TOML.Value
   -> f (Map.Map T.Text TOML.Value)
-mapAt k = at k . _Just . _Table . alist
+mapAt k = at k . just_ . _Table . alist
 
 listAt
   :: Applicative f
@@ -39,7 +43,7 @@ listAt
   -> ([TOML.Value] -> f [TOML.Value])
   -> Map.Map T.Text TOML.Value
   -> f (Map.Map T.Text TOML.Value)
-listAt k = at k . _Just . _List
+listAt k = at k . just_ . _List
 
 testTableKey :: [(T.Text, TOML.Value)] -> Test
 testTableKey kv
@@ -47,7 +51,7 @@ testTableKey kv
            (==) expected actual
   where
     expected = Just "value"
-    actual   = kv ^? alist . mapAt "table" . at "key" . _Just . _String
+    actual   = kv ^? alist . mapAt "table" . at "key" . just_ . _String
 
 testTableZoo :: [(T.Text, TOML.Value)] -> Test
 testTableZoo kv
@@ -55,7 +59,7 @@ testTableZoo kv
            (==) expected actual
   where
     expected = Nothing
-    actual   = kv ^? alist . mapAt "table" . at "zoo" . _Just . _String
+    actual   = kv ^? alist . mapAt "table" . at "zoo" . just_ . _String
 
 testTableSubtableKey :: [(T.Text, TOML.Value)] -> Test
 testTableSubtableKey kv
@@ -63,7 +67,7 @@ testTableSubtableKey kv
            (==) expected actual
   where
     expected = Just "another value"
-    actual   = kv ^? alist . mapAt "table" . mapAt "subtable" . at "key" . _Just . _String
+    actual   = kv ^? alist . mapAt "table" . mapAt "subtable" . at "key" . just_ . _String
 
 testTableInlineNameFirst :: [(T.Text, TOML.Value)] -> Test
 testTableInlineNameFirst kv
@@ -71,7 +75,7 @@ testTableInlineNameFirst kv
            (==) expected actual
   where
     expected = Just "Tom"
-    actual   = kv ^? alist . mapAt "table" . mapAt "inline" . mapAt "name" . at "first" . _Just . _String
+    actual   = kv ^? alist . mapAt "table" . mapAt "inline" . mapAt "name" . at "first" . just_ . _String
 
 testTableInlinePointY :: [(T.Text, TOML.Value)] -> Test
 testTableInlinePointY kv
@@ -79,7 +83,7 @@ testTableInlinePointY kv
            (==) expected actual
   where
     expected = Just 2
-    actual   = kv ^? alist . mapAt "table" . mapAt "inline" . mapAt "point" . at "y" . _Just . _Integer
+    actual   = kv ^? alist . mapAt "table" . mapAt "inline" . mapAt "point" . at "y" . just_ . _Integer
 
 testStringBasicBasic :: [(T.Text, TOML.Value)] -> Test
 testStringBasicBasic kv
@@ -87,7 +91,7 @@ testStringBasicBasic kv
            (==) expected actual
   where
     expected = Just "I'm a string. \"You can quote me\". Name\tJos\233\nLocation\tSF."
-    actual   = kv ^? alist . mapAt "string" . mapAt "basic" . at "basic" . _Just . _String
+    actual   = kv ^? alist . mapAt "string" . mapAt "basic" . at "basic" . just_ . _String
 
 testStringMultiline :: [(T.Text, TOML.Value)] -> Test
 testStringMultiline kv
@@ -95,9 +99,9 @@ testStringMultiline kv
               allEqual
               [actual1, actual2, actual3]
   where
-    actual1 = kv ^? alist . mapAt "string" . mapAt "multiline" . at "key1" . _Just . _String
-    actual2 = kv ^? alist . mapAt "string" . mapAt "multiline" . at "key2" . _Just . _String
-    actual3 = kv ^? alist . mapAt "string" . mapAt "multiline" . at "key3" . _Just . _String
+    actual1 = kv ^? alist . mapAt "string" . mapAt "multiline" . at "key1" . just_ . _String
+    actual2 = kv ^? alist . mapAt "string" . mapAt "multiline" . at "key2" . just_ . _String
+    actual3 = kv ^? alist . mapAt "string" . mapAt "multiline" . at "key3" . just_ . _String
 
 testStringMultilineContinued :: [(T.Text, TOML.Value)] -> Test
 testStringMultilineContinued kv
@@ -105,9 +109,9 @@ testStringMultilineContinued kv
               allEqual
               [actual1, actual2, actual3]
   where
-    actual1 = kv ^? alist . mapAt "string" . mapAt "multiline" . mapAt "continued" . at "key1" . _Just . _String
-    actual2 = kv ^? alist . mapAt "string" . mapAt "multiline" . mapAt "continued" . at "key2" . _Just . _String
-    actual3 = kv ^? alist . mapAt "string" . mapAt "multiline" . mapAt "continued" . at "key3" . _Just . _String
+    actual1 = kv ^? alist . mapAt "string" . mapAt "multiline" . mapAt "continued" . at "key1" . just_ . _String
+    actual2 = kv ^? alist . mapAt "string" . mapAt "multiline" . mapAt "continued" . at "key2" . just_ . _String
+    actual3 = kv ^? alist . mapAt "string" . mapAt "multiline" . mapAt "continued" . at "key3" . just_ . _String
 
 testArrayKey1 :: [(T.Text, TOML.Value)] -> Test
 testArrayKey1 kv
