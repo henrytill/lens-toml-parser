@@ -1,5 +1,5 @@
 -- |
--- Module      : TOML.Lens
+-- Module      : Toml.Lens
 -- Description : Lenses for toml-parser
 -- Copyright   : (c) 2017-2022, Henry Till
 -- License     : ISC
@@ -8,24 +8,23 @@
 --
 -- Lenses for <https://hackage.haskell.org/package/toml-parser toml-parser>.
 --
-module TOML.Lens
+module Toml.Lens
   ( _Table
-  , _List
-  , _Double
+  , _Array
+  , _Float
   , _Integer
   , _String
   , _Bool
-  , _ZonedTimeV
-  , _LocalTimeV
-  , _DayV
-  , _TimeOfDayV
+  , _ZonedTime
+  , _LocalTime
+  , _Day
+  , _TimeOfDay
   ) where
 
 import           Data.Profunctor
-import qualified Data.Text       as T
-import           Data.Time
+import qualified Data.Time       as Time
 
-import           TOML
+import           Toml
 
 --
 -- With help from:
@@ -49,10 +48,10 @@ prism
 prism bt seta = dimap seta (either pure (fmap bt)) . right'
 {-# INLINE prism #-}
 
--- | @_Table :: Prism' Value [(Text, Value)]@
+-- | @_Table :: Prism' Value Table@
 _Table
   :: (Choice p, Applicative f)
-  => p [(T.Text, Value)] (f [(T.Text, Value)])
+  => p Table (f Table)
   -> p Value (f Value)
 _Table =
   prism Table $ \ n -> case n of
@@ -60,27 +59,27 @@ _Table =
     _       -> Left n
 {-# INLINE _Table #-}
 
--- | @_List :: Prism' Value [Value]@
-_List
+-- | @_Array :: Prism' Value [Value]@
+_Array
   :: (Choice p, Applicative f)
   => p [Value] (f [Value])
   -> p Value (f Value)
-_List =
-  prism List $ \ n -> case n of
-    List v -> Right v
-    _      -> Left n
-{-# INLINE _List #-}
+_Array =
+  prism Array $ \ n -> case n of
+    Array v -> Right v
+    _       -> Left n
+{-# INLINE _Array #-}
 
--- | @_Double :: Prism' Value Double@
-_Double
+-- | @_Float :: Prism' Value Double@
+_Float
   :: (Choice p, Applicative f)
   => p Double (f Double)
   -> p Value (f Value)
-_Double =
-  prism Double $ \ n -> case n of
-    Double v -> Right v
-    _        -> Left n
-{-# INLINE _Double #-}
+_Float =
+  prism Float $ \ n -> case n of
+    Float v -> Right v
+    _       -> Left n
+{-# INLINE _Float #-}
 
 -- | @_Integer :: Prism' Value Integer@
 _Integer
@@ -93,10 +92,10 @@ _Integer =
     _         -> Left n
 {-# INLINE _Integer #-}
 
--- | @_String :: Prism' Value T.Text@
+-- | @_String :: Prism' Value String@
 _String
   :: (Choice p, Applicative f)
-  => p T.Text (f T.Text)
+  => p String (f String)
   -> p Value (f Value)
 _String =
   prism String $ \ n -> case n of
@@ -115,46 +114,46 @@ _Bool =
     _      -> Left n
 {-# INLINE _Bool #-}
 
--- | @_ZonedTimeV :: Prism' Value ZonedTime@
-_ZonedTimeV
+-- | @_ZonedTime :: Prism' Value Time.ZonedTime@
+_ZonedTime
   :: (Choice p, Applicative f)
-  => p ZonedTime (f ZonedTime)
+  => p Time.ZonedTime (f Time.ZonedTime)
   -> p Value (f Value)
-_ZonedTimeV =
-  prism ZonedTimeV $ \ n -> case n of
-    ZonedTimeV v -> Right v
-    _            -> Left n
-{-# INLINE _ZonedTimeV #-}
+_ZonedTime =
+  prism ZonedTime $ \ n -> case n of
+    ZonedTime v -> Right v
+    _           -> Left n
+{-# INLINE _ZonedTime #-}
 
--- | @_LocalTimeV :: Prism' Value LocalTime@
-_LocalTimeV
+-- | @_LocalTime :: Prism' Value Time.LocalTime@
+_LocalTime
   :: (Choice p, Applicative f)
-  => p LocalTime (f LocalTime)
+  => p Time.LocalTime (f Time.LocalTime)
   -> p Value (f Value)
-_LocalTimeV =
-  prism LocalTimeV $ \ n -> case n of
-    LocalTimeV v -> Right v
-    _            -> Left n
-{-# INLINE _LocalTimeV #-}
+_LocalTime =
+  prism LocalTime $ \ n -> case n of
+    LocalTime v -> Right v
+    _           -> Left n
+{-# INLINE _LocalTime #-}
 
--- | @_DayV :: Prism' Value Day@
-_DayV
+-- | @_Day :: Prism' Value Time.Day@
+_Day
   :: (Choice p, Applicative f)
-  => p Day (f Day)
+  => p Time.Day (f Time.Day)
   -> p Value (f Value)
-_DayV =
-  prism DayV $ \ n -> case n of
-    DayV v -> Right v
-    _      -> Left n
-{-# INLINE _DayV #-}
+_Day =
+  prism Day $ \ n -> case n of
+    Day v -> Right v
+    _     -> Left n
+{-# INLINE _Day #-}
 
--- | @_TimeOfDayV :: Prism' Value TimeOfDay@
-_TimeOfDayV
+-- | @_TimeOfDay :: Prism' Value Time.TimeOfDay@
+_TimeOfDay
   :: (Choice p, Applicative f)
-  => p TimeOfDay (f TimeOfDay)
+  => p Time.TimeOfDay (f Time.TimeOfDay)
   -> p Value (f Value)
-_TimeOfDayV =
-  prism TimeOfDayV $ \ n -> case n of
-    TimeOfDayV v -> Right v
-    _            -> Left n
-{-# INLINE _TimeOfDayV #-}
+_TimeOfDay =
+  prism TimeOfDay $ \ n -> case n of
+    TimeOfDay v -> Right v
+    _           -> Left n
+{-# INLINE _TimeOfDay #-}
