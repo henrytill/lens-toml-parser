@@ -22,3 +22,7 @@
 ## 0.1.0.4  -- 2020-05-05
 
 * Loosened constraints on `base`, `hlint`, `profunctors`, and `time`.
+
+## 0.2.0.0  -- 2023-08-26
+
+* Updated to toml-parser >=1.1.  This is a breaking change.
