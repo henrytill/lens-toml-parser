@@ -1,6 +1,5 @@
-*~
 /dist/
 /dist-newstyle/
-cabal.project.local
+/*result*/
+/cabal.project.local*
 shell.nix
-/result/
