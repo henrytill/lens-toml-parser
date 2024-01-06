@@ -10,7 +10,7 @@ license-file:        LICENSE
 author:              Henry Till
 maintainer:          henrytill@gmail.com
 homepage:            https://github.com/henrytill/lens-toml-parser
-copyright:           Copyright (c) 2017-2023, Henry Till
+copyright:           Copyright (c) 2017-2024, Henry Till
 category:            Language, Lenses
 build-type:          Simple
 cabal-version:       >=1.10
