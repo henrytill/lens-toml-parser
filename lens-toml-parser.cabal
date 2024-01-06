@@ -47,6 +47,6 @@ test-suite tests
                      , toml-parser >=1.1 && <1.4
                      , lens-family >=2.1 && <2.2
                      , lens-toml-parser
-  hs-source-dirs:      tests
+  hs-source-dirs:      test
   default-language:    Haskell2010
   ghc-options:         -Wall
