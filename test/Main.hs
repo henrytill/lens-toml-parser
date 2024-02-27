@@ -1,20 +1,36 @@
-{-# Language OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main (main) where
 
 import Control.Monad (unless)
-import qualified Data.Text.IO as Text
+import Data.Map.Strict (Map)
+import Data.Text (Text)
+import qualified Data.Text.IO as TIO
 import Lens.Family2
 import Lens.Family2.Stock (at, just_, _2)
+import Lens.Family2.Unchecked (adapter)
 import System.Exit (exitFailure)
 import Test.Dwergaz
-import Toml (Table, Value)
+import Toml (Table, Table' (..), Value, Value')
 import qualified Toml
 import Toml.Lens
-import Data.Text (Text)
 
 allEqual :: (Eq a) => [a] -> Bool
 allEqual (x : xs) = all (== x) xs
 allEqual [] = error "allEqual: empty list"
+
+table :: Adapter' (Table' a) (Map Text (a, Value' a))
+table = adapter unTable MkTable
+  where
+    unTable (MkTable t) = t
+
+valueAt ::
+  (Applicative f) =>
+  Text ->
+  (Value -> f Value) ->
+  Table ->
+  f Table
+valueAt k = under table . at k . just_ . _2
 
 mapAt ::
   (Applicative f) =>
@@ -23,22 +39,6 @@ mapAt ::
   Table ->
   f Table
 mapAt k = valueAt k . _Table
-
-arrayAt ::
-  (Applicative f) =>
-  Text ->
-  ([Value] -> f [Value]) ->
-  Table ->
-  f Table
-arrayAt k = valueAt k . _List
-
-valueAt ::
-  (Applicative f) =>
-  Text ->
-  (Value -> f Value) ->
-  Table ->
-  f Table
-valueAt k f (Toml.MkTable t) = Toml.MkTable <$> (at k . just_ . _2) f t
 
 testTableKey :: Table -> Test
 testTableKey kv =
@@ -137,7 +137,7 @@ testArrayKey1 kv =
     actual
   where
     expected = [1, 2, 3]
-    actual = kv ^.. mapAt "array" . arrayAt "key1" . traverse . _Integer
+    actual = kv ^.. mapAt "array" . valueAt "key1" . _List . traverse . _Integer
 
 runTests :: Table -> [Result]
 runTests kv = runTest . ($ kv) <$> tests
@@ -155,7 +155,7 @@ runTests kv = runTest . ($ kv) <$> tests
       ]
 
 readTomlFile :: String -> IO Table
-readTomlFile file = Text.readFile file >>= parse >>= handleError
+readTomlFile file = TIO.readFile file >>= parse >>= handleError
   where
     parse = pure . Toml.parse
     handleError = either (error . show) (pure . Toml.forgetTableAnns)
