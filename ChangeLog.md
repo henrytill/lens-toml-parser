@@ -26,3 +26,10 @@
 ## 0.2.0.0  -- 2023-08-26
 
 * Updated to toml-parser >=1.1.  This is a breaking change.
+
+## 0.3.0.0  -- 2024-02-27
+
+* Updated to toml-parser-2.0.0.0. This is a breaking change due to the
+  new toml-parser using Text and different constructor names. It also
+  adds new prisms supporting annotations used by the new toml-parser
+  version for tracking file locations.
