@@ -3,7 +3,6 @@
 module Main (main) where
 
 import Control.Monad (unless)
-import qualified Data.List as List
 import Data.Map.Strict (Map)
 import Data.Text (Text)
 import qualified Data.Text.IO as TIO
@@ -131,25 +130,29 @@ testArrayKey1 kv =
     expected = [1, 2, 3]
     actual = kv ^.. mapAt "array" . valueAt "key1" . _List . traverse . _Integer
 
-makeFolder :: Table -> (String, Bool) -> (Table -> Test) -> (String, Bool)
-makeFolder kv (output, isPassed) test =
-  let result = runTest (test kv)
-   in (output <> "\n" <> resultToString result, isPassed && resultIsPassed result)
+tests :: [Table -> Test]
+tests =
+  [ testTableKey,
+    testTableZoo,
+    testTableSubtableKey,
+    testTableInlineNameFirst,
+    testTableInlinePointY,
+    testStringBasicBasic,
+    testStringMultiline,
+    testStringMultilineContinued,
+    testArrayKey1
+  ]
+
+step :: Result -> (ShowS, Bool) -> (ShowS, Bool)
+step result (f, allPassed) =
+  ( showString (resultToString result) . showChar '\n' . f,
+    resultIsPassed result && allPassed
+  )
 
 runTests :: Table -> (String, Bool)
-runTests kv = List.foldl' (makeFolder kv) (mempty, True) tests
+runTests kv = (buildString mempty, passed)
   where
-    tests =
-      [ testTableKey,
-        testTableZoo,
-        testTableSubtableKey,
-        testTableInlineNameFirst,
-        testTableInlinePointY,
-        testStringBasicBasic,
-        testStringMultiline,
-        testStringMultilineContinued,
-        testArrayKey1
-      ]
+    (buildString, passed) = foldr (step . runTest . ($ kv)) (mempty, True) tests
 
 readTomlFile :: String -> IO Table
 readTomlFile file = TIO.readFile file >>= parse >>= handleError
@@ -161,5 +164,5 @@ main :: IO ()
 main = do
   ex <- readTomlFile "./example/example-v0.4.0.toml"
   let (output, passed) = runTests ex
-  putStrLn output
+  putStr output
   unless passed exitFailure
