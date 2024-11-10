@@ -44,7 +44,7 @@ test-suite tests
   main-is:             Main.hs
   build-depends:       base        >=4.14 && <5
                      , containers  >=0.5  && <0.8
-                     , dwergaz     >=0.2  && <0.3
+                     , dwergaz     >=0.3  && <0.4
                      , lens-family >=2.1  && <2.2
                      , text        >=0.2  && <3
                      , toml-parser >=2.0  && <2.1

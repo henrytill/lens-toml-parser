@@ -3,6 +3,7 @@
 module Main (main) where
 
 import Control.Monad (unless)
+import qualified Data.List as List
 import Data.Map.Strict (Map)
 import Data.Text (Text)
 import qualified Data.Text.IO as TIO
@@ -42,9 +43,8 @@ mapAt k = valueAt k . _Table
 
 testTableKey :: Table -> Test
 testTableKey kv =
-  Expect
+  assertEqual
     "'key' from 'table' == Just \"value\""
-    (==)
     expected
     actual
   where
@@ -53,9 +53,8 @@ testTableKey kv =
 
 testTableZoo :: Table -> Test
 testTableZoo kv =
-  Expect
+  assertEqual
     "'zoo' from 'table' == Nothing"
-    (==)
     expected
     actual
   where
@@ -64,9 +63,8 @@ testTableZoo kv =
 
 testTableSubtableKey :: Table -> Test
 testTableSubtableKey kv =
-  Expect
+  assertEqual
     "'key' from 'subtable' from 'table' == Just \"another value\""
-    (==)
     expected
     actual
   where
@@ -75,9 +73,8 @@ testTableSubtableKey kv =
 
 testTableInlineNameFirst :: Table -> Test
 testTableInlineNameFirst kv =
-  Expect
+  assertEqual
     "'first' from 'name' from 'inline' from 'table' == \"Tom\""
-    (==)
     expected
     actual
   where
@@ -86,9 +83,8 @@ testTableInlineNameFirst kv =
 
 testTableInlinePointY :: Table -> Test
 testTableInlinePointY kv =
-  Expect
+  assertEqual
     "'y' from 'point' from 'inline' from 'table' == Just 2"
-    (==)
     expected
     actual
   where
@@ -97,9 +93,8 @@ testTableInlinePointY kv =
 
 testStringBasicBasic :: Table -> Test
 testStringBasicBasic kv =
-  Expect
+  assertEqual
     "'basic' from 'basic' from 'string' == <some escaped nonsense>"
-    (==)
     expected
     actual
   where
@@ -108,10 +103,9 @@ testStringBasicBasic kv =
 
 testStringMultiline :: Table -> Test
 testStringMultiline kv =
-  Predicate
+  assertBool
     "'key1', 'key2', and 'key3' from 'multiline' from 'string' are all the same"
-    allEqual
-    [actual1, actual2, actual3]
+    (allEqual [actual1, actual2, actual3])
   where
     actual1 = kv ^? mapAt "string" . mapAt "multiline" . valueAt "key1" . _Text
     actual2 = kv ^? mapAt "string" . mapAt "multiline" . valueAt "key2" . _Text
@@ -119,10 +113,9 @@ testStringMultiline kv =
 
 testStringMultilineContinued :: Table -> Test
 testStringMultilineContinued kv =
-  Predicate
+  assertBool
     "'key1', 'key2', and 'key3' from 'continued' from 'multiline' from 'string' are all the same"
-    allEqual
-    [actual1, actual2, actual3]
+    (allEqual [actual1, actual2, actual3])
   where
     actual1 = kv ^? mapAt "string" . mapAt "multiline" . mapAt "continued" . valueAt "key1" . _Text
     actual2 = kv ^? mapAt "string" . mapAt "multiline" . mapAt "continued" . valueAt "key2" . _Text
@@ -130,17 +123,21 @@ testStringMultilineContinued kv =
 
 testArrayKey1 :: Table -> Test
 testArrayKey1 kv =
-  Expect
+  assertEqual
     "'key1' from 'array' == [1, 2, 3]"
-    (==)
     expected
     actual
   where
     expected = [1, 2, 3]
     actual = kv ^.. mapAt "array" . valueAt "key1" . _List . traverse . _Integer
 
-runTests :: Table -> [Result]
-runTests kv = runTest . ($ kv) <$> tests
+makeFolder :: Table -> (String, Bool) -> (Table -> Test) -> (String, Bool)
+makeFolder kv (output, isPassed) test =
+  let result = runTest (test kv)
+   in (output <> "\n" <> resultToString result, isPassed && resultIsPassed result)
+
+runTests :: Table -> (String, Bool)
+runTests kv = List.foldl' (makeFolder kv) (mempty, True) tests
   where
     tests =
       [ testTableKey,
@@ -163,6 +160,6 @@ readTomlFile file = TIO.readFile file >>= parse >>= handleError
 main :: IO ()
 main = do
   ex <- readTomlFile "./example/example-v0.4.0.toml"
-  let rs = runTests ex
-  mapM_ print rs
-  unless (all isPassed rs) exitFailure
+  let (output, passed) = runTests ex
+  putStrLn output
+  unless passed exitFailure
