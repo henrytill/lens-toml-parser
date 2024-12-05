@@ -33,3 +33,8 @@
   new toml-parser using Text and different constructor names. It also
   adds new prisms supporting annotations used by the new toml-parser
   version for tracking file locations.
+
+## 0.3.0.1  -- 2024-12-05
+
+* Updated to dwergaz >=3.0.
+* Tweaked tests.
