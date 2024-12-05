@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                lens-toml-parser
-version:             0.3.0.0
+version:             0.3.0.1
 synopsis:            Lenses for toml-parser
 description:         This library provides lenses for toml-parser.
 license:             ISC
