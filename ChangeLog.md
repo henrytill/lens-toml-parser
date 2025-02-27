@@ -38,3 +38,8 @@
 
 * Updated to dwergaz >=3.0.
 * Tweaked tests.
+
+## 0.3.0.2  -- 2025-02-26
+
+* Updated copyright dates.
+* Adjusted constraints on time.
