@@ -132,21 +132,21 @@ testArrayKey1 tbl =
 
 tests :: [Table -> Test]
 tests =
-  [ testTableKey,
-    testTableZoo,
-    testTableSubtableKey,
-    testTableInlineNameFirst,
-    testTableInlinePointY,
-    testStringBasicBasic,
-    testStringMultiline,
-    testStringMultilineContinued,
-    testArrayKey1
+  [ testTableKey
+  , testTableZoo
+  , testTableSubtableKey
+  , testTableInlineNameFirst
+  , testTableInlinePointY
+  , testStringBasicBasic
+  , testStringMultiline
+  , testStringMultilineContinued
+  , testArrayKey1
   ]
 
 step :: Result -> (ShowS, Bool) -> (ShowS, Bool)
 step result (f, allPassed) =
-  ( showString (resultToString result) . showChar '\n' . f,
-    resultIsPassed result && allPassed
+  ( showString (resultToString result) . showChar '\n' . f
+  , resultIsPassed result && allPassed
   )
 
 runTests :: Table -> (String, Bool)

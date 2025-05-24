@@ -9,28 +9,28 @@
 -- Lenses for <https://hackage.haskell.org/package/toml-parser toml-parser>.
 module Toml.Lens
   ( -- * Unannotated
-    _Table,
-    _List,
-    _Double,
-    _Integer,
-    _Text,
-    _Bool,
-    _ZonedTime,
-    _LocalTime,
-    _Day,
-    _TimeOfDay,
+    _Table
+  , _List
+  , _Double
+  , _Integer
+  , _Text
+  , _Bool
+  , _ZonedTime
+  , _LocalTime
+  , _Day
+  , _TimeOfDay
 
     -- * Annotated
-    _Table',
-    _List',
-    _Double',
-    _Integer',
-    _Text',
-    _Bool',
-    _ZonedTime',
-    _LocalTime',
-    _Day',
-    _TimeOfDay',
+  , _Table'
+  , _List'
+  , _Double'
+  , _Integer'
+  , _Text'
+  , _Bool'
+  , _ZonedTime'
+  , _LocalTime'
+  , _Day'
+  , _TimeOfDay'
   )
 where
 
