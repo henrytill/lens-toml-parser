@@ -8,7 +8,7 @@ license-file:        LICENSE
 author:              Henry Till
 maintainer:          henrytill@gmail.com
 homepage:            https://github.com/henrytill/lens-toml-parser
-copyright:           Copyright (c) 2017-2025, Henry Till
+copyright:           Copyright (c) 2017-2026, Henry Till
 category:            Language, Lenses
 build-type:          Simple
 tested-with:         GHC ==9.4.8 || ==9.6.7 || ==9.8.4 || ==9.10.3 || ==9.12.4 || ==9.14.1
