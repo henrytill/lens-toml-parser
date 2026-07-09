@@ -43,3 +43,8 @@
 
 * Updated copyright dates.
 * Adjusted constraints on time.
+
+## 0.3.0.3  -- 2026-07-08
+
+* Updated copyright dates.
+* Adjusted constraints on `containers` and `time` for compatibility with GHC 9.14.x.
