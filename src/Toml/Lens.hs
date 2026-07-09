@@ -1,7 +1,7 @@
 -- |
 -- Module      : Toml.Lens
 -- Description : Lenses for toml-parser
--- Copyright   : (c) 2017-2025, Henry Till
+-- Copyright   : (c) 2017-2026, Henry Till
 -- License     : ISC
 -- Maintainer  : henrytill@gmail.com
 -- Stability   : experimental
