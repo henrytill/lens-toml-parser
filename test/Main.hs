@@ -6,9 +6,8 @@ import Control.Monad (unless)
 import Data.Map.Strict (Map)
 import Data.Text (Text)
 import qualified Data.Text.IO as TIO
-import Lens.Family2
-import Lens.Family2.Stock (at, just_, _2)
-import Lens.Family2.Unchecked (adapter)
+import Lens.Micro
+import Lens.Micro.GHC ()
 import System.Exit (exitFailure)
 import Test.Dwergaz
 import Toml (Table, Table' (..), Value, Value')
@@ -19,8 +18,8 @@ allEqual :: (Eq a) => [a] -> Bool
 allEqual (x : xs) = all (== x) xs
 allEqual [] = error "allEqual: empty list"
 
-table :: Adapter' (Table' a) (Map Text (a, Value' a))
-table = adapter unTable MkTable
+table :: Lens' (Table' a) (Map Text (a, Value' a))
+table = lens unTable (const MkTable)
   where
     unTable (MkTable t) = t
 
@@ -30,7 +29,7 @@ valueAt ::
   (Value -> f Value) ->
   Table ->
   f Table
-valueAt k = under table . at k . just_ . _2
+valueAt k = table . at k . _Just . _2
 
 mapAt ::
   (Applicative f) =>
